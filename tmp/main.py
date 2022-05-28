@@ -1,26 +1,28 @@
 import sys
-import numpy as np
-
-h, w = map(int, input().split())
-# h, w = int(h), int(w)
-
-masu = np.zeros([h, w])
 
 
-for i in range(h):
-    masu[i, :] = np.array(list(map(int, input().split())))
+n = int(input())
+rate_list = list(map(int, input().split()))
+# rate_list = [869120000, 998244353, 777777777, 123456789, 100100100,
+#              464646464, 987654321, 252525252, 869120001, 1000000000]
+rate_list.sort()
+num_stu = int(input())
 
-h_sum_list = []
-for i in range(h):
-    h_sum_list.append(int(np.sum(masu[i, :])))
-w_sum_list = []
-for i in range(w):
-    w_sum_list.append(int(np.sum(masu[:, i])))
-
-
-for i in range(h):
-    tmp_list = []
-    for j in range(w):
-        tmp = h_sum_list[i] + w_sum_list[j] - int(masu[i, j])
-        tmp_list.append(int(tmp))
-    print(*tmp_list)
+for i in range(num_stu):
+    left = 0
+    right = n-1
+    mid = n//2
+    rate = int(input())
+    if rate_list[left] == rate or rate_list[right] == rate:
+        print(0)
+        continue
+    while(right-left) > 1:
+        if rate < rate_list[mid]:
+            right = mid
+        elif rate > rate_list[mid]:
+            left = mid
+        else:
+            right = mid
+            break
+        mid = (left+right)//2
+    print(min(abs(rate_list[left]-rate), abs(rate_list[right]-rate)))
