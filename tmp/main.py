@@ -2,24 +2,38 @@ import sys
 import math
 
 
-n, q = list(map(int, input().split()))
-a = list(map(int, input().split()))
-l = [list(map(int, input().split())) for _ in range(q)]
+n, k = list(map(int, input().split()))
 
-diff_list = []
-for i in range(n-1):
-    diff_list.append(a[i+1]-a[i])
+mod = 10 ** 9 + 7
+if n == 1:
+    print(k)
+else:
+    ans = k * (k - 1) * pow(k - 2, n - 2, mod)
+    print(ans % mod)
 
-tmp = [abs(x) for x in diff_list]
-ans = sum(tmp)
-for left, right, v in l:
-    if left > 1:
-        ans -= abs(diff_list[left-2])
-        diff_list[left-2] += v
-        ans += abs(diff_list[left-2])
-    if right < n:
-        ans -= abs(diff_list[right-1])
-        diff_list[right-1] -= v
-        ans += abs(diff_list[right-1])
-    # print(diff_list)
-    print(ans)
+# if n == 1:
+#     print(k)
+# elif n == 2:
+#     print(k*(k-1))
+# else:
+#     if k < 3:
+#         print(0)
+#     else:
+#         sum = k*(k-1)
+#         n2 = k-2
+#         r = n-2
+#         ans = 1
+#         sqrt_r = math.floor(math.sqrt(r))
+#         while(True):
+#             tmp = (n2**sqrt_r) % (10**9+7)
+#             tmp = (tmp**sqrt_r) % (10**9+7)
+#             ans = (ans*tmp) % (10**9+7)
+#             r = r - sqrt_r**2
+#             if r < 4:
+#                 break
+#             sqrt_r = math.floor(math.sqrt(r))
+#         while(r > 0):
+#             ans = (ans*(n2)) % (10**9+7)
+#             r -= 1
+#         sum *= ans
+#         print(sum % (10**9+7))
