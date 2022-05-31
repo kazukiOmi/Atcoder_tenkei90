@@ -1,49 +1,38 @@
+from email.mime import base
 import sys
-from itertools import permutations
+
+
+def base46(x):
+    return int(x) % 46
 
 
 input = sys.stdin.readline
+# a = list(map(base46, input().split()))
+# b = list(map(base46, input().split()))
+# c = list(map(base46, input().split()))
 
 n = int(input())
-a = [list(map(int, input().split())) for _ in range(n)]
-m = int(input())
+a = list(map(int, input().split()))
+b = list(map(int, input().split()))
+c = list(map(int, input().split()))
+
+a_dict = {}
+b_dict = {}
+c_dict = {}
+for i in range(46):
+    a_dict[i] = 0
+    b_dict[i] = 0
+    c_dict[i] = 0
 
 
-uwasa = {}
-for _ in range(m):
-    x, y = list(map(int, input().split()))
-    x, y = x-1, y-1
-    if x not in uwasa:
-        uwasa[x] = [y]
-    else:
-        uwasa[x].append(y)
-    if y not in uwasa:
-        uwasa[y] = [x]
-    else:
-        uwasa[y].append(x)
-# print(uwasa)
-
-
-ans = 10001
-
-for i in permutations(range(n)):
-    # print(i)
-    can_goal = True
-    for j in range(n-1):
-        if i[j] in uwasa:
-            if i[j+1] in uwasa[i[j]]:
-                can_goal = False
-                break
-    if can_goal:
-        # print(i)
-        tmp = 0
-        order = 0
-        for k in i:
-            tmp += a[k][order]
-            order += 1
-        if tmp < ans:
-            ans = tmp
-if ans < 10001:
-    print(ans)
-else:
-    print(-1)
+for ai, bi, ci in zip(a, b, c):
+    at, bt, ct = ai % 46, bi % 46, ci % 46
+    a_dict[at] += 1
+    b_dict[bt] += 1
+    c_dict[ct] += 1
+ans = 0
+for i in range(46):
+    for j in range(46):
+        base_46 = (46-(i+j)) % 46
+        ans += a_dict[i]*b_dict[j]*c_dict[base_46]
+print(ans)
