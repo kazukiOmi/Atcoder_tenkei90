@@ -1,21 +1,28 @@
 import sys
+import math
+
+# input = sys.stdin.readline
 
 
-def base46(x):
-    return int(x) % 46
+# def combinations_count(n, r):
+# return math.factorial(n) // (math.factorial(n - r) * math.factorial(r))
+def combinations_count(n, r):
+    ans = 1
+    bunbo = 1
+    s = 1
+    for i in range(n, n-r, -1):
+        ans *= i
+        bunbo *= s
+        s += 1
+    return ans // bunbo
 
 
-input = sys.stdin.readline
-
-n, k = list(map(int, input().split()))
-
-ab_list = [list(map(int, input().split())) for _ in range(n)]
-
-a_list = [b for _, b in ab_list]
-b_list = [a-b for a, b in ab_list]
-a_list.extend(b_list)
-new_a_list = sorted(a_list, reverse=True)
+n, l = list(map(int, input().split()))
 ans = 0
-for v in new_a_list[:k]:
-    ans += v
-print(ans)
+use_max_l = n // l
+
+for i in range(use_max_l+1):
+    total = n-(l*i)+i
+    ans += combinations_count(total, i)
+# print(ans)
+print(ans % (10**9+7))
