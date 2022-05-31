@@ -1,22 +1,49 @@
 import sys
+from itertools import permutations
+
 
 input = sys.stdin.readline
 
-n, q = list(map(int, input().split()))
-sequence = list(map(int, input().split()))
+n = int(input())
+a = [list(map(int, input().split())) for _ in range(n)]
+m = int(input())
 
-shift = 0
-for i in range(q):
-    t, x, y = list(map(int, input().split()))
+
+uwasa = {}
+for _ in range(m):
+    x, y = list(map(int, input().split()))
     x, y = x-1, y-1
-
-    x1 = (x-shift) % n
-    y1 = (y-shift) % n
-
-    if t == 1:
-        sequence[x1], sequence[y1] = sequence[y1], sequence[x1]
-    elif t == 2:
-        shift += 1
-        # shift %= n
+    if x not in uwasa:
+        uwasa[x] = [y]
     else:
-        print(sequence[x1])
+        uwasa[x].append(y)
+    if y not in uwasa:
+        uwasa[y] = [x]
+    else:
+        uwasa[y].append(x)
+# print(uwasa)
+
+
+ans = 10001
+
+for i in permutations(range(n)):
+    # print(i)
+    can_goal = True
+    for j in range(n-1):
+        if i[j] in uwasa:
+            if i[j+1] in uwasa[i[j]]:
+                can_goal = False
+                break
+    if can_goal:
+        # print(i)
+        tmp = 0
+        order = 0
+        for k in i:
+            tmp += a[k][order]
+            order += 1
+        if tmp < ans:
+            ans = tmp
+if ans < 10001:
+    print(ans)
+else:
+    print(-1)
