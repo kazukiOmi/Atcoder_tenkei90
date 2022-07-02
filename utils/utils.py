@@ -71,3 +71,49 @@ def factorization(n):
         arr.append([n, 1])
 
     return arr
+
+
+def combination(n, r):
+    if(n < r):
+        return 0
+    return int(math.factorial(n) / (math.factorial(r) * math.factorial(n - r)))
+
+
+def updateCombinationIndex(lastIndex, start, repetition=False):
+    result = lastIndex[:start]
+    x = lastIndex[start] + 1
+    for i in range(start, len(lastIndex)):
+        result.append(x)
+        if(repetition == False):
+            x += 1
+    return result
+
+
+def getComginationIndex(length, r, lastIndex):
+    result = []
+    for i in range(r):
+        if(len(lastIndex) == 0):
+            result.append(i)
+        elif(lastIndex[i] >= length - r + i):
+            result = updateCombinationIndex(lastIndex, i - 1, False)
+            break
+        elif(i == r - 1):
+            result = updateCombinationIndex(lastIndex, i, False)
+    return result
+
+
+def getListElements(lis, indices):
+    """listからindicesで示される要素の組を返す"""
+    return [lis[i] for i in indices]
+
+
+def combinationList(data, r):
+    """dataからr個選ぶ組み合わせを全て出力する"""
+    length = len(data)
+    total = combination(length, r)
+    result = []
+    lastIndex = []
+    for i in range(total):
+        lastIndex = getComginationIndex(length, r, lastIndex)
+        result.append(getListElements(data, lastIndex))
+    return result
